@@ -1,416 +1,75 @@
-<html lang="en"><head> 
+<!DOCTYPE html>
+<html lang="en">
+<head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Weather App</title>
     <link rel="stylesheet" href="style.css">
-
-    <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
-    <script crossorigin="" src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-    <script crossorigin="" src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-<script>"use strict";
-
-var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
-
-function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
-
-function Day(_ref) {
-  var date = _ref.date;
-  var max = _ref.max;
-  var min = _ref.min;
-  var code = _ref.code;
-
-  return React.createElement(
-    "li",
-    null,
-    React.createElement(
-      "span",
-      null,
-      formatDay(date)
-    ),
-    React.createElement(
-      "span",
-      { className: "max" },
-      max
-    ),
-    React.createElement(
-      "span",
-      { className: "min" },
-      min
-    ),
-    React.createElement(
-      "span",
-      null,
-      getWeatherIcon(code)
-    )
-  );
-}
-var DayList = function DayList(_ref2) {
-  var weather = _ref2.weather;
-  var max = weather.temperature_2m_max;
-  var min = weather.temperature_2m_min;
-  var dates = weather.time;
-  var codes = weather.weathercode;
-
-  return React.createElement(
-    "ul",
-    { className: "weather" },
-    dates.map(function (date, i) {
-      return React.createElement(Day, {
-        date: date,
-        max: max.at(i),
-        min: min.at(i),
-        code: codes.at(i),
-        key: date,
-        isToday: i === 0
-      });
-    })
-  );
-};
-var Loading = function Loading() {
-  return React.createElement(
-    "div",
-    { className: "loading" },
-    "Loading..."
-  );
-};
-var Search = function Search (_ref3) {
-  var cityName = _ref3.cityName;
-  var setcityName = _ref3.setcityName;
-
-  function handleCityName(e) {
-    e.preventDefault();
-    setcityName(e.target.value);
-  }
-  return React.createElement(
-    "div",
-    { className: "serach-contatiner" },
-    React.createElement("input", {
-      value: cityName,
-      onChange: function onChange(e) {
-        return handleCityName(e);
-      },
-      placeholder: "Search City",
-      type: "text"
-    }),
-    React.createElement(
-      "button",
-      null,
-      "Search"
-    )
-  );
-};
-var Toady = function Toady(_ref4) {
-  var weather = _ref4.weather;
-  var location = _ref4.location;
-  var max = weather.temperature_2m_max;
-  var dates = weather.time;
-  var code = weather.weathercode;
-
-  return React.createElement(
-    "div",
-    { className: "today-container" },
-    React.createElement(
-      "div",
-      { className: "max-degree" },
-      React.createElement(
-        "h1",
-        null,
-        max[0]
-      ),
-      React.createElement(
-        "p",
-        { className: "sign" },
-        getWeatherIcon(code[0])
-      )
-    ),
-    React.createElement(
-      "div",
-      { className: "today" },
-      React.createElement(
-        "h1",
-        null,
-        "Today"
-      ),
-      React.createElement(
-        "p",
-        null,
-        location
-      ),
-      React.createElement(
-        "p",
-        null,
-        formatDay(dates[0])
-      )
-    )
-  );
-};
-function getWeatherIcon(wmoCode) {
-  var icons = new Map([[[0], "☀️"], [[1], "🌤"], [[2], "⛅️"], [[3], "☁️"], [[45, 48], "🌫"], [[51, 56, 61, 66, 80], "🌦"], [[53, 55, 63, 65, 57, 67, 81, 82], "🌧"], [[71, 73, 75, 77, 85, 86], "🌨"], [[95], "🌩"], [[96, 99], "⛈"]]);
-  var arr = [].concat(_toConsumableArray(icons.keys())).find(function (key) {
-    return key.includes(wmoCode);
-  });
-  if (!arr) return "NOT FOUND";
-  return icons.get(arr);
-}
-
-function formatDay(dateStr) {
-  return new Intl.DateTimeFormat("en", {
-    weekday: "short"
-  }).format(new Date(dateStr));
-}
-var App = function App() {
-  var _React$useState = React.useState("LONDON");
-
-  var _React$useState2 = _slicedToArray(_React$useState, 2);
-
-  var city = _React$useState2[0];
-  var setcity = _React$useState2[1];
-
-  var _React$useState3 = React.useState(false);
-
-  var _React$useState4 = _slicedToArray(_React$useState3, 2);
-
-  var isLoading = _React$useState4[0];
-  var setIsLoading = _React$useState4[1];
-
-  var _React$useState5 = React.useState("");
-
-  var _React$useState6 = _slicedToArray(_React$useState5, 2);
-
-  var error = _React$useState6[0];
-  var setError = _React$useState6[1];
-
-  var _React$useState7 = React.useState();
-
-  var _React$useState8 = _slicedToArray(_React$useState7, 2);
-
-  var weather = _React$useState8[0];
-  var setWeather = _React$useState8[1];
-
-  var _React$useState9 = React.useState("");
-
-  var _React$useState10 = _slicedToArray(_React$useState9, 2);
-
-  var displayLocation = _React$useState10[0];
-  var setDisplayLocation = _React$useState10[1];
-
-
-  function convertToFlag(countryCode) {
-    var codePoints = countryCode.toUpperCase().split("").map(function (char) {
-      return 127397 + char.charCodeAt();
-    });
-    return String.fromCodePoint.apply(String, _toConsumableArray(codePoints));
-  }
-  React.useEffect(function () {
-    var fetchWeather = async function fetchWeather() {
-      try {
-        setIsLoading(true);
-        // 1) Getting location (geocoding)
-        var geoRes = await fetch("https://geocoding-api.open-meteo.com/v1/search?name=" + city);
-        var geoData = await geoRes.json();
-        if (!geoData.results) throw new Error("Location not found");
-
-        var _geoData$results$at = geoData.results.at(0);
-
-        var latitude = _geoData$results$at.latitude;
-        var longitude = _geoData$results$at.longitude;
-        var timezone = _geoData$results$at.timezone;
-        var name = _geoData$results$at.name;
-        var country_code = _geoData$results$at.country_code;
-
-        setDisplayLocation(name + " " + convertToFlag(country_code));
-
-        // 2) Getting actual weather
-        var weatherRes = await fetch("https://api.open-meteo.com/v1/forecast?latitude=" + latitude + "&longitude=" + longitude + "&timezone=" + timezone + "&daily=weathercode,temperature_2m_max,temperature_2m_min");
-        var weatherData = await weatherRes.json();
-        setWeather(weatherData.daily);
-      } catch (err) {
-        setError(err.messege);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    fetchWeather();
-  }, [city]);
-
-  return React.createElement(
-    "div",
-    { className: "app" },
-    React.createElement(Search, { cityName: city, setcityName: setcity }),
-    isLoading && React.createElement(Loading, null),
-    weather && React.createElement(Toady, { location: displayLocation, weather: weather }),
-    weather && React.createElement(DayList, { weather: weather })
-  );
-};
-
-ReactDOM.render(React.createElement(App, null), document.getElementById('root'));
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIklubGluZSBCYWJlbCBzY3JpcHQiXSwibmFtZXMiOlsiRGF5IiwiZGF0ZSIsIm1heCIsIm1pbiIsImNvZGUiLCJmb3JtYXREYXkiLCJnZXRXZWF0aGVySWNvbiIsIkRheUxpc3QiLCJ3ZWF0aGVyIiwidGVtcGVyYXR1cmVfMm1fbWF4IiwidGVtcGVyYXR1cmVfMm1fbWluIiwiZGF0ZXMiLCJ0aW1lIiwiY29kZXMiLCJ3ZWF0aGVyY29kZSIsIm1hcCIsImkiLCJhdCIsIkxvYWRpbmciLCJTZWFyY2giLCJjaXR5TmFtZSIsInNldGNpdHlOYW1lIiwiaGFuZGxlQ2l0eU5hbWUiLCJlIiwicHJldmVudERlZmF1bHQiLCJ0YXJnZXQiLCJ2YWx1ZSIsIlRvYWR5IiwibG9jYXRpb24iLCJ3bW9Db2RlIiwiaWNvbnMiLCJNYXAiLCJhcnIiLCJrZXlzIiwiZmluZCIsImtleSIsImluY2x1ZGVzIiwiZ2V0IiwiZGF0ZVN0ciIsIkludGwiLCJEYXRlVGltZUZvcm1hdCIsIndlZWtkYXkiLCJmb3JtYXQiLCJEYXRlIiwiQXBwIiwiUmVhY3QiLCJ1c2VTdGF0ZSIsImNpdHkiLCJzZXRjaXR5IiwiaXNMb2FkaW5nIiwic2V0SXNMb2FkaW5nIiwiZXJyb3IiLCJzZXRFcnJvciIsInNldFdlYXRoZXIiLCJkaXNwbGF5TG9jYXRpb24iLCJzZXREaXNwbGF5TG9jYXRpb24iLCJjb252ZXJ0VG9GbGFnIiwiY291bnRyeUNvZGUiLCJjb2RlUG9pbnRzIiwidG9VcHBlckNhc2UiLCJzcGxpdCIsImNoYXIiLCJjaGFyQ29kZUF0IiwiU3RyaW5nIiwiZnJvbUNvZGVQb2ludCIsInVzZUVmZmVjdCIsImZldGNoV2VhdGhlciIsImdlb1JlcyIsImZldGNoIiwiZ2VvRGF0YSIsImpzb24iLCJyZXN1bHRzIiwiRXJyb3IiLCJsYXRpdHVkZSIsImxvbmdpdHVkZSIsInRpbWV6b25lIiwibmFtZSIsImNvdW50cnlfY29kZSIsIndlYXRoZXJSZXMiLCJ3ZWF0aGVyRGF0YSIsImRhaWx5IiwiZXJy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Z0I7QUFDRCxHQTVCSCxFQTZCRSxDQUFDbkIsSUFBRCxDQTdCRjs7QUFnQ0EsU0FDRTtBQUFBO0FBQUEsTUFBSyxXQUFVLEtBQWY7QUFDRSx3QkFBQyxNQUFELElBQVEsVUFBVUEsSUFBbEIsRUFBd0IsYUFBYUMsT0FBckMsR0FERjtBQUVHQyxpQkFBYSxvQkFBQyxPQUFELE9BRmhCO0FBR0d6QyxlQUFXLG9CQUFDLEtBQUQsSUFBTyxVQUFVOEMsZUFBakIsRUFBa0MsU0FBUzlDLE9BQTNDLEdBSGQ7QUFJR0EsZUFBVyxvQkFBQyxPQUFELElBQVMsU0FBU0EsT0FBbEI7QUFKZCxHQURGO0FBUUQsQ0F0REQ7O0FBd0RLMkUsU0FBU0MsTUFBVCxDQUNDLG9CQUFDLEdBQUQsT0FERCxFQUVDQyxTQUFTQyxjQUFULENBQXdCLE1BQXhCLENBRkQiLCJmaWxlIjoiSW5saW5lIEJhYmVsIHNjcmlwdCIsInNvdXJjZXNDb250ZW50IjpbIlxuICAgIGZ1bmN0aW9uIERheSh7IGRhdGUsIG1heCwgbWluLCBjb2RlIH0pIHtcbiAgcmV0dXJuIChcbiAgICA8bGk+XG4gICAgICA8c3Bhbj57Zm9ybWF0RGF5KGRhdGUpfTwvc3Bhbj5cbiAgICAgIDxzcGFuIGNsYXNzTmFtZT1cIm1heFwiPnttYXh9PC9zcGFuPlxuICAgICAgPHNwYW4gY2xhc3NOYW1lPVwibWluXCI+e21pbn08L3NwYW4+XG4gICAgICA8c3Bhbj57Z2V0V2VhdGhlckljb24oY29kZSl9PC9zcGFuPlxuICAgIDwvbGk+XG4gICk7XG59XG5jb25zdCBEYXlMaXN0ID0gKHsgd2VhdGhlciB9KSA9PiB7XG4gIGNvbnN0IHtcbiAgICB0ZW1wZXJhdHVyZV8ybV9tYXg6IG1heCxcbiAgICB0ZW1wZXJhdHVyZV8ybV9taW46IG1pbixcbiAgICB0aW1lOiBkYXRlcyxcbiAgICB3ZWF0aGVyY29kZTogY29kZXMsXG4gIH0gPSB3ZWF0aGVyO1xuICByZXR1cm4gKFxuICAgICAgPHVsIGNsYXNzTmFtZT1cIndlYXRoZXJcIj5cbiAgICAgICAge2RhdGVzLm1hcCgoZGF0ZSwgaSkgPT4gKFxuICAgICAgICAgIDxEYXlcbiAgICAgICAgICAgIGRhdGU9e2RhdGV9XG4gICAgICAgICAgICBtYXg9e21heC5hdChpKX1cbiAgICAgICAgICAgIG1pbj17bWluLmF0KGkpfVxuICAgICAgICAgICAgY29kZT17Y29kZXMuYXQoaSl9XG4gICAgICAgICAgICBrZXk9e2RhdGV9XG4gICAgICAgICAgICBpc1RvZGF5PXtpID09PSAwfVxuICAgICAgICAgIC8+XG4gICAgICAgICkpfVxuICAgICAgPC91bD5cbiAgKTtcbn07XG5jb25zdCBMb2FkaW5nID0gKCkgPT4ge1xuICByZXR1cm4gPGRpdiBjbGFzc05hbWU9XCJsb2FkaW5nXCI+TG9hZGluZy4uLjwvZGl2Pjtcbn07XG5jb25zdCBTZWFyY2ggPSAoe2NpdHlOYW1lLHNldGNpdHlOYW1lfSkgPT4ge1xuIGZ1bmN0aW9uIGhhbmRsZUNpdHlOYW1lKGUpIHtcbiAgICBlLnByZXZlbnREZWZhdWx0KCk7XG4gICAgc2V0Y2l0eU5hbWUoZS50YXJnZXQudmFsdWUpO1xuICB9XG4gIHJldHVybiAoXG4gICAgPGRpdiBjbGFzc05hbWU9XCJzZXJhY2gtY29udGF0aW5lclwiPlxuICAgICAgPGlucHV0XG4gICAgICAgIHZhbHVlPXtjaXR5TmFtZX1cbiAgICAgICAgb25DaGFuZ2U9eyhlKSA9PiBoYW5kbGVDaXR5TmFtZShlKX1cbiAgICAgICAgcGxhY2Vob2xkZXI9XCJTZWFyY2ggQ2l0eVwiXG4gICAgICAgIHR5cGU9XCJ0ZXh0XCJcbiAgICAgIC8+XG4gICAgICA8YnV0dG9uPlNlYXJjaDwvYnV0dG9uPlxuICAgIDwvZGl2PlxuICApO1xufTtcbmNvbnN0IFRvYWR5ID0gKHsgd2VhdGhlciwgbG9jYXRpb24gfSkgPT4ge1xuICBjb25zdCB7XG4gICAgdGVtcGVyYXR1cmVfMm1fbWF4OiBtYXgsXG4gICAgdGltZTogZGF0ZXMsXG4gICAgd2VhdGhlcmNvZGU6IGNvZGUsXG4gIH0gPSB3ZWF0aGVyO1xuICByZXR1cm4gKFxuICAgIDxkaXYgY2xhc3NOYW1lPVwidG9kYXktY29udGFpbmVyXCI+XG4gICAgICA8ZGl2IGNsYXNzTmFtZT1cIm1heC1kZWdyZWVcIj5cbiAgICAgICAgPGgxPnttYXhbMF19PC9oMT5cbiAgICAgICAgPHAgY2xhc3NOYW1lPVwic2lnblwiPntnZXRXZWF0aGVySWNvbihjb2RlWzBdKX08L3A+XG4gICAgICA8L2Rpdj5cbiAgICAgIDxkaXYgY2xhc3NOYW1lPVwidG9kYXlcIj5cbiAgICAgICAgPGgxPlRvZGF5PC9oMT5cbiAgICAgICAgPHA+e2xvY2F0aW9ufTwvcD5cbiAgICAgICAgPHA+e2Zvcm1hdERheShkYXRlc1swXSl9PC9wPlxuICAgICAgPC9kaXY+XG4gICAgPC9kaXY+XG4gICk7XG59O1xuIGZ1bmN0aW9uIGdldFdlYXRoZXJJY29uKHdtb0NvZGUpIHtcbiAgY29uc3QgaWNvbnMgPSBuZXcgTWFwKFtcbiAgICBbWzBdLCBcIuKYgO+4j1wiXSxcbiAgICBbWzFdLCBcIvCfjKRcIl0sXG4gICAgW1syXSwgXCLim4XvuI9cIl0sXG4gICAgW1szXSwgXCLimIHvuI9cIl0sXG4gICAgW1s0NSwgNDhdLCBcIvCfjKtcIl0sXG4gICAgW1s1MSwgNTYsIDYxLCA2NiwgODBdLCBcIvCfjKZcIl0sXG4gICAgW1s1MywgNTUsIDYzLCA2NSwgNTcsIDY3LCA4MSwgODJdLCBcIvCfjKdcIl0sXG4gICAgW1s3MSwgNzMsIDc1LCA3NywgODUsIDg2XSwgXCLwn4yoXCJdLFxuICAgIFtbOTVdLCBcIvCfjKlcIl0sXG4gICAgW1s5NiwgOTldLCBcIuKbiFwiXSxcbiAgXSk7XG4gIGNvbnN0IGFyciA9IFsuLi5pY29ucy5rZXlzKCldLmZpbmQoKGtleSkgPT4ga2V5LmluY2x1ZGVzKHdtb0NvZGUpKTtcbiAgaWYgKCFhcnIpIHJldHVybiBcIk5PVCBGT1VORFwiO1xuICByZXR1cm4gaWNvbnMuZ2V0KGFycik7XG59XG5cblxuIGZ1bmN0aW9uIGZvcm1hdERheShkYXRlU3RyKSB7XG4gIHJldHVybiBuZXcgSW50bC5EYXRlVGltZUZvcm1hdChcImVuXCIsIHtcbiAgICB3ZWVrZGF5OiBcInNob3J0XCIsXG4gIH0pLmZvcm1hdChuZXcgRGF0ZShkYXRlU3RyKSk7XG59XG5jb25zdCBBcHAgPSAoKSA9PiB7XG4gIGNvbnN0IFtjaXR5LCBzZXRjaXR5XSA9IFJlYWN0LnVzZVN0YXRlKFwiTE9ORE9OXCIpO1xuICBjb25zdCBbaXNMb2FkaW5nLCBzZXRJc0xvYWRpbmddID0gUmVhY3QudXNlU3RhdGUoZmFsc2UpO1xuICBjb25zdCBbZXJyb3IsIHNldEVycm9yXSA9IFJlYWN0LnVzZVN0YXRlKFwiXCIpO1xuICBjb25zdCBbd2VhdGhlciwgc2V0V2VhdGhlcl0gPSBSZWFjdC51c2VTdGF0ZSgpO1xuICBjb25zdCBbZGlzcGxheUxvY2F0aW9uLCBzZXREaXNwbGF5TG9jYXRpb25dID0gUmVhY3QudXNlU3RhdGUoXCJcIik7XG5cbiAgZnVuY3Rpb24gY29udmVydFRvRmxhZyhjb3VudHJ5Q29kZSkge1xuICAgIGNvbnN0IGNvZGVQb2ludHMgPSBjb3VudHJ5Q29kZVxuICAgICAgLnRvVXBwZXJDYXNlKClcbiAgICAgIC5zcGxpdChcIlwiKVxuICAgICAgLm1hcCgoY2hhcikgPT4gMTI3Mzk3ICsgY2hhci5jaGFyQ29kZUF0KCkpO1xuICAgIHJldHVybiBTdHJpbmcuZnJvbUNvZGVQb2ludCguLi5jb2RlUG9pbnRzKTtcbiAgfVxuICBSZWFjdC51c2VFZmZlY3QoXG4gICAgZnVuY3Rpb24gKCkge1xuICAgICAgY29uc3QgZmV0Y2hXZWF0aGVyID0gYXN5bmMgKCkgPT4ge1xuICAgICAgICB0cnkge1xuICAgICAgICAgIHNldElzTG9hZGluZyh0cnVlKTtcbiAgICAgICAgICAvLyAxKSBHZXR0aW5nIGxvY2F0aW9uIChnZW9jb2RpbmcpXG4gICAgICAgICAgY29uc3QgZ2VvUmVzID0gYXdhaXQgZmV0Y2goXG4gICAgICAgICAgICBgaHR0cHM6Ly9nZW9jb2RpbmctYXBpLm9wZW4tbWV0ZW8uY29tL3YxL3NlYXJjaD9uYW1lPSR7Y2l0eX1gXG4gICAgICAgICAgKTtcbiAgICAgICAgICBjb25zdCBnZW9EYXRhID0gYXdhaXQgZ2VvUmVzLmpzb24oKTtcbiAgICAgICAgICBpZiAoIWdlb0RhdGEucmVzdWx0cykgdGhyb3cgbmV3IEVycm9yKFwiTG9jYXRpb24gbm90IGZvdW5kXCIpO1xuICAgICAgICAgIGNvbnN0IHsgbGF0aXR1ZGUsIGxvbmdpdHVkZSwgdGltZXpvbmUsIG5hbWUsIGNvdW50cnlfY29kZSB9ID1cbiAgICAgICAgICAgIGdlb0RhdGEucmVzdWx0cy5hdCgwKTtcbiAgICAgICAgICBzZXREaXNwbGF5TG9jYXRpb24oYCR7bmFtZX0gJHtjb252ZXJ0VG9GbGFnKGNvdW50cnlfY29kZSl9YCk7XG5cbiAgICAgICAgICAvLyAyKSBHZXR0aW5nIGFjdHVhbCB3ZWF0aGVyXG4gICAgICAgICAgY29uc3Qgd2VhdGhlclJlcyA9IGF3YWl0IGZldGNoKFxuICAgICAgICAgICAgYGh0dHBzOi8vYXBpLm9wZW4tbWV0ZW8uY29tL3YxL2ZvcmVjYXN0P2xhdGl0dWRlPSR7bGF0aXR1ZGV9JmxvbmdpdHVkZT0ke2xvbmdpdHVkZX0mdGltZXpvbmU9JHt0aW1lem9uZX0mZGFpbHk9d2VhdGhlcmNvZGUsdGVtcGVyYXR1cmVfMm1fbWF4LHRlbXBlcmF0dXJlXzJtX21pbmBcbiAgICAgICAgICApO1xuICAgICAgICAgIGNvbnN0IHdlYXRoZXJEYXRhID0gYXdhaXQgd2VhdGhlclJlcy5qc29uKCk7XG4gICAgICAgICAgc2V0V2VhdGhlcih3ZWF0aGVyRGF0YS5kYWlseSk7XG4gICAgICAgIH0gY2F0Y2ggKGVycikge1xuICAgICAgICAgIHNldEVycm9yKGVyci5tZXNzZWdlKTtcbiAgICAgICAgfSBmaW5hbGx5IHtcbiAgICAgICAgICBzZXRJc0xvYWRpbmcoZmFsc2UpO1xuICAgICAgICB9XG4gICAgICB9O1xuICAgICAgZmV0Y2hXZWF0aGVyKCk7XG4gICAgfSxcbiAgICBbY2l0eV1cbiAgKTtcblxuICByZXR1cm4gKFxuICAgIDxkaXYgY2xhc3NOYW1lPVwiYXBwXCI+XG4gICAgICA8U2VhcmNoIGNpdHlOYW1lPXtjaXR5fSBzZXRjaXR5TmFtZT17c2V0Y2l0eX0gLz5cbiAgICAgIHtpc0xvYWRpbmcgJiYgPExvYWRpbmcgLz59XG4gICAgICB7d2VhdGhlciAmJiA8VG9hZHkgbG9jYXRpb249e2Rpc3BsYXlMb2NhdGlvbn0gd2VhdGhlcj17d2VhdGhlcn0gLz59XG4gICAgICB7d2VhdGhlciAmJiA8RGF5TGlzdCB3ZWF0aGVyPXt3ZWF0aGVyfSAvPn1cbiAgICA8L2Rpdj5cbiAgKTtcbn07XG5cbiAgICAgUmVhY3RET00ucmVuZGVyKFxuICAgICAgPEFwcC8+LFxuICAgICAgZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoJ3Jvb3QnKVxuICAgICk7XG5cblxuICAgICAiXX0=</script></head>
-
+</head>
 <body>
-    <div id="root"><div class="app"><div class="serach-contatiner"><input placeholder="Search City" type="text" value="LONDON"><button>Search</button></div><div class="today-container"><div class="max-degree"><h1>22.1</h1><p class="sign">☁️</p></div><div class="today"><h1>Today</h1><p>London 🇬🇧</p><p>Tue</p></div></div><ul class="weather"><li><span>Tue</span><span class="max">22.1</span><span class="min">13.5</span><span>☁️</span></li><li><span>Wed</span><span class="max">22.2</span><span class="min">14.8</span><span>🌦</span></li><li><span>Thu</span><span class="max">15.3</span><span class="min">11.5</span><span>🌦</span></li><li><span>Fri</span><span class="max">19.6</span><span class="min">11.4</span><span>🌦</span></li><li><span>Sat</span><span class="max">12.6</span><span class="min">6.9</span><span>☁️</span></li><li><span>Sun</span><span class="max">11.4</span><span class="min">5.1</span><span>⛅️</span></li><li><span>Mon</span><span class="max">12.9</span><span class="min">3.5</span><span>☁️</span></li></ul></div></div>
+    <div class="container">
+        <div class="weather__header">
+            <div class="Weather">
+                <img src="https://www.emojiall.com/en/header-svg/%F0%9F%8C%8F.svg" alt="Weather" style="width: 100px; height: 80px;">
+              </div>
+              
+                
+              
+            <form class="weather__search"> 
+                <input type="text" placeholder="Search for a city..." class="weather__searchform">
+                <i class="fa-solid fa-magnifying-glass"></i>
+            </form> 
+            <div class="weather__units">
+                <span class="weather_unit_celsius">&#176C</span>
+                <span class="weather_unit_farenheit">&#176F</span>
+            </div>
+        </div>
+        <div class="weather__body">
+            <h1 class="weather__city"></h1>
+            <div class="weather__datetime"></div>
+            <div class="weather__forecast"></div>
+            <div class="weather__icon"></div>
+            <p class="weather__temperature"></p>
+            
+            <div class="weather__minmax">
+                <p>Min: 12&#176</p>
+                <p>Max: 16&#176</p>
+            </div>
+        </div>
 
-<script type="text/babel">
-    function Day({ date, max, min, code }) {
-  return (
-    <li>
-      <span>{formatDay(date)}</span>
-      <span className="max">{max}</span>
-      <span className="min">{min}</span>
-      <span>{getWeatherIcon(code)}</span>
-    </li>
-  );
-}
-const DayList = ({ weather }) => {
-  const {
-    temperature_2m_max: max,
-    temperature_2m_min: min,
-    time: dates,
-    weathercode: codes,
-  } = weather;
-  return (
-      <ul className="weather">
-        {dates.map((date, i) => (
-          <Day
-            date={date}
-            max={max.at(i)}
-            min={min.at(i)}
-            code={codes.at(i)}
-            key={date}
-            isToday={i === 0}
-          />
-        ))}
-      </ul>
-  );
-};
-const Loading = () => {
-  return <div className="loading">Loading...</div>;
-};
-const Search = ({cityName,setcityName}) => {
- function handleCityName(e) {
-    e.preventDefault();
-    setcityName(e.target.value);
-  }
-  return (
-    <div className="serach-contatiner">
-      <input
-        value={cityName}
-        onChange={(e) => handleCityName(e)}
-        placeholder="Search City"
-        type="text"
-      />
-      <button>Search</button>
+        <div class="weather__info">
+            <div class="weather__card">
+                <i class="fa-solid fa-temperature-full"></i>
+                <div>
+                    <p>Real Feel</p>
+                    <p class="weather__realfeel">18&#176</p>
+                </div>
+            </div>
+            <div class="weather__card">
+                <i class="fa-solid fa-droplet"></i>
+                <div>
+                    <p>Humidity</p>
+                    <p class="weather__humidity">18&#176</p>
+                </div>
+            </div>
+            <div class="weather__card">
+                <i class="fa-solid fa-wind"></i>
+                <div>
+                    <p>Wind</p>
+                    <p class="weather__wind">18&#176</p>
+                </div>
+            </div>
+            <div class="weather__card">
+                <i class="fa-solid fa-gauge-high"></i>
+                <div>
+                    <p>Pressure</p>
+                    <p class="weather__pressure">18&#176</p>
+                </div>
+            </div>
+        </div>
     </div>
-    
-  );
-
-};
-const Toady = ({ weather, location }) => {
-  const {
-    temperature_2m_max: max,
-    time: dates,
-    weathercode: code,
-  } = weather;
-  return (
-    <div className="today-container">
-      <div className="max-degree">
-        <h1>{max[0]}</h1>
-        <p className="sign">{getWeatherIcon(code[0])}</p>
-      </div>
-      <div className="today">
-        <h1>Today</h1>
-        <p>{location}</p>
-        <p>{formatDay(dates[0])}</p>
-      </div>
-    </div>
-  );
-};
- function getWeatherIcon(wmoCode) {
-  const icons = new Map([
-    [[0], "☀️"],
-    [[1], "🌤"],
-    [[2], "⛅️"],
-    [[3], "☁️"],
-    [[45, 48], "🌫"],
-    [[51, 56, 61, 66, 80], "🌦"],
-    [[53, 55, 63, 65, 57, 67, 81, 82], "🌧"],
-    [[71, 73, 75, 77, 85, 86], "🌨"],
-    [[95], "🌩"],
-    [[96, 99], "⛈"],
-  ]);
-  const arr = [...icons.keys()].find((key) => key.includes(wmoCode));
-  if (!arr) return "NOT FOUND";
-  return icons.get(arr);
-}
-
-
- function formatDay(dateStr) {
-  return new Intl.DateTimeFormat("en", {
-    weekday: "short",
-  }).format(new Date(dateStr));
-}
-const App = () => {
-  const [city, setcity] = React.useState("LONDON");
-  const [isLoading, setIsLoading] = React.useState(false);
-  const [error, setError] = React.useState("");
-  const [weather, setWeather] = React.useState();
-  const [displayLocation, setDisplayLocation] = React.useState("");
-
-  function convertToFlag(countryCode) {
-    const codePoints = countryCode
-      .toUpperCase()
-      .split("")
-      .map((char) => 127397 + char.charCodeAt());
-    return String.fromCodePoint(...codePoints);
-  }
-  React.useEffect(
-    function () {
-      const fetchWeather = async () => {
-        try {
-          setIsLoading(true);
-          // 1) Getting location (geocoding)
-          const geoRes = await fetch(
-            `https://geocoding-api.open-meteo.com/v1/search?name=${city}`
-          );
-          const geoData = await geoRes.json();
-          if (!geoData.results) throw new Error("Location not found");
-          const { latitude, longitude, timezone, name, country_code } =
-            geoData.results.at(0);
-          setDisplayLocation(`${name} ${convertToFlag(country_code)}`);
-
-          // 2) Getting actual weather
-          const weatherRes = await fetch(
-            `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&timezone=${timezone}&daily=weathercode,temperature_2m_max,temperature_2m_min`
-          );
-          const weatherData = await weatherRes.json();
-          setWeather(weatherData.daily);
-        } catch (err) {
-          setError(err.messege);
-        } finally {
-          setIsLoading(false);
-        }
-      };
-      fetchWeather();
-    },
-    [city]
-  );
-
-  return (
-    <div className="app">
-      <Search cityName={city} setcityName={setcity} />
-      {isLoading && <Loading />}
-      {weather && <Toady location={displayLocation} weather={weather} />}
-      {weather && <DayList weather={weather} />}
-    </div>
-  );
-};
-
-     ReactDOM.render(
-      <App/>,
-      document.getElementById('root')
-    );
-
-
-     </script>
-
-</body></html>
+    <script src="https://kit.fontawesome.com/a692e1c39f.js" crossorigin="anonymous"></script>
+    <script src="app.js"></script>
+</body>
+</html>
